@@ -94,9 +94,11 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_blank_password(self):
         """Test token is not generated for blank password."""
-        self._extracted_from_test_create_token_blank_password_5('test@example.com', '')
+        self._extracted_from_test_create_token_blank_password_5(
+            'test@example.com',
+            ''
+            )
 
-    # TODO Rename this here and in `test_create_token_bad_credentials` and `test_create_token_blank_password`
     def _extracted_from_test_create_token_blank_password_5(self, arg0, arg1):
         payload = {'email': arg0, 'password': arg1}
         res = self.client.post(TOKEN_URL, payload)
