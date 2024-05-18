@@ -61,9 +61,7 @@ class PrivateRecipeApiTests(TestCase):
         response = self.client.get(RECIPES_URL)
 
         recipes = Recipe.objects.all().order_by('-id')
-        serializer = RecipeSerializer(recipes, many=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        self._extracted_from_test_recipe_list_limited_to_user_9(recipes, response)
 
     def test_recipe_list_limited_to_user(self):
         """Test retrieving recipes for user."""
@@ -77,6 +75,9 @@ class PrivateRecipeApiTests(TestCase):
         response = self.client.get(RECIPES_URL)
 
         recipes = Recipe.objects.filter(user=self.user)
+        self._extracted_from_test_recipe_list_limited_to_user_9(recipes, response)
+
+    def _extracted_from_test_recipe_list_limited_to_user_9(self, recipes, response):
         serializer = RecipeSerializer(recipes, many=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
