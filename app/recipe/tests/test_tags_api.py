@@ -36,7 +36,9 @@ class PrivateTagsApiTests(TestCase):
     """Test the authorized user tags API."""
 
     def setUp(self):
-        self.user = create_user()
+        self.user = create_user(
+            email='test@exmaple.com', password='testpass123'
+            )
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
