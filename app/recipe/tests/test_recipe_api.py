@@ -212,10 +212,8 @@ class PrivateRecipeApiTests(TestCase):
             'link': 'https://sample.com/recipe.pdf',
             'tags': [{'name': 'Vegan'}, {'name': 'Dessert'}],
         }
-        response = self.client.post(RECIPES_URL, payload, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        recipe = self._extracted_from_test_create_with_tags()
+        recipe = self._extracted_from_test_create_with_tags(payload)
 # sourcery skip: no-loop-in-tests
         for tag in payload['tags']:
             exists = recipe.tags.filter(
@@ -235,9 +233,8 @@ class PrivateRecipeApiTests(TestCase):
             'link': 'https://sample.com/recipe.pdf',
             'tags': [{'name': tag1.name}, {'name': 'Dessert'}],
         }
-        response = self.client.post(RECIPES_URL, payload, format='json')
 
-        recipe = self._extracted_from_test_create_with_tags()
+        recipe = self._extracted_from_test_create_with_tags(payload)
         self.assertIn(tag1, recipe.tags.all())
 # sourcery skip: no-loop-in-tests
         for tag in payload['tags']:
@@ -248,7 +245,9 @@ class PrivateRecipeApiTests(TestCase):
             self.assertTrue(exists)
 
     # TODO Rename this here and in
-    def _extracted_from_test_create_with_tags(self):
+    def _extracted_from_test_create_with_tags(self, payload=None):
+        response = self.client.post(RECIPES_URL, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         result = Recipe.objects.filter(user=self.user)
         self.assertEqual(result.count(), 1)
         result = result[0]
@@ -267,11 +266,12 @@ class PrivateRecipeApiTests(TestCase):
     def test_update_recipe_assign_tags(self):
         """Test updating a recipe assigns tags."""
         tag1 = Tag.objects.create(user=self.user, name='Vegan')
+        tag2 = Tag.objects.create(user=self.user, name='Dessert')
         recipe = create_recipe(user=self.user)
 
-        tag2 = Tag.objects.create(user=self.user, name='Dessert')
-        payload = {'tags': [{'name': tag2.name}]}
+        payload = {'tags': [{'name': tag1.name}, {'name': tag2.name}]}
         self._extracted_from_test_clear_recipe_tags_6(recipe, payload)
+        self.assertIn(tag1, recipe.tags.all())
         self.assertIn(tag2, recipe.tags.all())
 
     def test_clear_recipe_tags(self):
@@ -284,7 +284,7 @@ class PrivateRecipeApiTests(TestCase):
         self._extracted_from_test_clear_recipe_tags_6(recipe, payload)
         self.assertEqual(recipe.tags.count(), 0)
 
-    # TODO Rename this here and in `test_create_tag_on_update`, `test_update_recipe_assign_tags` and `test_clear_recipe_tags`
+    # TODO Rename this here:
     def _extracted_from_test_clear_recipe_tags_6(self, recipe, payload):
         url = detail_url(recipe.id)
         response = self.client.patch(url, payload, format='json')
