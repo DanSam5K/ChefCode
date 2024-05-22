@@ -260,10 +260,7 @@ class PrivateRecipeApiTests(TestCase):
         recipe = create_recipe(user=self.user)
 
         payload = {'tags': [{'name': 'Dessert'}]}
-        url = detail_url(recipe.id)
-        response = self.client.patch(url, payload, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self._extracted_from_test_clear_recipe_tags_6(recipe, payload)
         new_tag = Tag.objects.get(user=self.user, name='Dessert')
         self.assertIn(new_tag, recipe.tags.all())
 
@@ -274,10 +271,7 @@ class PrivateRecipeApiTests(TestCase):
 
         tag2 = Tag.objects.create(user=self.user, name='Dessert')
         payload = {'tags': [{'name': tag2.name}]}
-        url = detail_url(recipe.id)
-        response = self.client.patch(url, payload, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self._extracted_from_test_clear_recipe_tags_6(recipe, payload)
         self.assertIn(tag2, recipe.tags.all())
 
     def test_clear_recipe_tags(self):
@@ -287,8 +281,11 @@ class PrivateRecipeApiTests(TestCase):
         recipe.tags.add(tag1)
 
         payload = {'tags': []}
+        self._extracted_from_test_clear_recipe_tags_6(recipe, payload)
+        self.assertEqual(recipe.tags.count(), 0)
+
+    # TODO Rename this here and in `test_create_tag_on_update`, `test_update_recipe_assign_tags` and `test_clear_recipe_tags`
+    def _extracted_from_test_clear_recipe_tags_6(self, recipe, payload):
         url = detail_url(recipe.id)
         response = self.client.patch(url, payload, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(recipe.tags.count(), 0)
