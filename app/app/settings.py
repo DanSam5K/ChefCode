@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'rest_framework',
-	'rest_framework.authtoken',
+    'rest_framework.authtoken',
     'drf_spectacular',
     'user',
-	'recipe',
+    'recipe',
 ]
 
 MIDDLEWARE = [
@@ -141,4 +141,8 @@ AUTH_USER_MODEL = 'core.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True,
 }
