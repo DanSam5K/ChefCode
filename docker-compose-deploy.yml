@@ -7,7 +7,7 @@ services:
     restart: always
     volumes:
       - static-data:/vol/web
-    envronment:
+    environment:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -21,7 +21,7 @@ services:
     image: postgres:13-alpine
     restart: always
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -39,5 +39,5 @@ services:
       - static-data:/vol/static
 
 volumes:
-  postgresql-data:
+  postgres-data:
   static-data:
