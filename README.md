@@ -9,7 +9,6 @@ ChefCode API is a web application designed to manage recipes and cooking instruc
 - [Technologies](#technologies)
 - [API Endpoints](#api-endpoints)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Running the Tests](#running-the-tests)
 - [Deployment](#deployment)
 - [Environment Variables](#environment-variables)
@@ -109,10 +108,15 @@ bash
 ```
 docker-compose -f docker-compose-deploy.yml up --build -d
 ```
-## Usage
-The API will be accessible at http://localhost:80.
+#### Usage
 
-You can access the API documentation at http://localhost:80/docs.
+You can access the API documentation at http://localhost:80/docs. or http://127.0.0.1/docs/
+
+#### Login as super admin to access the admin panel
+bash
+```
+docker-compose run --rm app sh -c "python manage.py createsuperuser"
+```
 
 You can access the Django admin panel at http://localhost:80/admin.
 
