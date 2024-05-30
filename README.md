@@ -95,23 +95,11 @@ Create a .env file in the root directory and set your environment variables. You
 
 Build and start the Docker containers:
 
-bash
-```
-docker-compose up --build.
-```
-
-## Usage
-The API will be accessible at http://localhost:8000.
-
-You can access the API documentation at http://localhost:8000/docs.
-
-You can access the Django admin panel at http://localhost:8000/admin.
-
 ## Running the Tests
 To run the tests, execute the following command:
 bash
 ```
-docker-compose run app sh -c "python manage.py test"
+docker-compose run app sh -c "python manage.py test && flake8"
 ```
 
 ## Deployment
@@ -121,6 +109,13 @@ bash
 ```
 docker-compose -f docker-compose-deploy.yml up --build -d
 ```
+## Usage
+The API will be accessible at http://localhost:80.
+
+You can access the API documentation at http://localhost:80/docs.
+
+You can access the Django admin panel at http://localhost:80/admin.
+
 ## Environment Variables
 The following environment variables need to be set in your .env file:
 
